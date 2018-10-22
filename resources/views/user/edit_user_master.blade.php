@@ -7,7 +7,7 @@
             <div class="form-group">
                 {!! Form::label('role', 'Sponser *', ['class' => 'col-sm-3 control-label']) !!}
                 <div class='col-sm-9'>
-                    {!! Form::select('activated_by', $sponsers, $user_master->activated_by,['class' => 'form-control requiredDD']) !!}
+                    {!! Form::select('reffer_by', $sponsers, $user_master->activated_by,['class' => 'form-control requiredDD']) !!}
                 </div>
             </div>
             <div class='form-group'>

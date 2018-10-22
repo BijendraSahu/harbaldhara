@@ -338,7 +338,9 @@ class APIController extends Controller
             $results[] = ['today_total_ads' => count($ads), 'video_view_count' => $video_count, 'image_view_count' => $image_count, 'text_view_count' => $text_count, 'user_type' => $user->is_paid == 1 ? 'paid' : 'free'];
             return $this->sendResponse($results, 'Advertisement count List');
         } else {
-            return $this->sendError('No record available', '');
+            $results[] = ['today_total_ads' => 0, 'video_view_count' => 0, 'image_view_count' => 0, 'text_view_count' => 0, 'user_type' => $user->is_paid == 1 ? 'paid' : 'free'];
+            return $this->sendResponse($results, 'Advertisement count List');
+//            return $this->sendError('No record available', '');
         }
     }
 

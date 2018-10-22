@@ -63,4 +63,4 @@ ALTER TABLE `advertisement` CHANGE `banner` `file_path` VARCHAR(100) CHARACTER S
 
 ALTER TABLE `advertisement` ADD `view_points` FLOAT NULL DEFAULT '0' AFTER `text`;
 
-ALTER TABLE `users` ADD `paid_time` DATETIME NULL DEFAULT NULL AFTER `is_paid`;  //18_10
+  //18_10

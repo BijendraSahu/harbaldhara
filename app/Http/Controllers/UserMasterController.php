@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\AdminModel;
+use App\GainTypePoints;
+use App\Reffer;
 use App\RoleMaster;
 use App\UserBankDetails;
 use App\UserKey;
 use App\UserMaster;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,7 +40,7 @@ class UserMasterController extends Controller
     public function edit($id)
     {
         $user_master = UserMaster::find($id);
-        $sponsers = AdminModel::getAllDropdown();
+        $sponsers = UserMaster::getUserDropdown();
         $bank = UserBankDetails::where(['user_id' => $id])->first();
         return view('user.edit_user_master')->with(['user_master' => $user_master, 'sponsers' => $sponsers, 'bank' => $bank]);
     }
@@ -51,16 +54,28 @@ class UserMasterController extends Controller
         $user_master->contact = request('contact');
         $user_master->paytm_contact = request('paytm_contact');
         $user_master->address = request('address');
-        $user_master->activated_by = request('activated_by');
+//        $user_master->activated_by = request('activated_by');
         $user_master->save();
 
-        $bank = UserBankDetails::where(['user_id' => $id])->first();
-        $bank->account_holder = request('account_holder');
-        $bank->ac_number = request('ac_number');
-        $bank->bank = request('bank');
-        $bank->aadhar_pan = request('aadhar_pan');
-        $bank->ifsc_code = request('ifsc_code');
-        $bank->save();
+        if(request('account_holder') != null) {
+            $bank = UserBankDetails::where(['user_id' => $id])->first();
+            $bank->account_holder = request('account_holder');
+            $bank->ac_number = request('ac_number');
+            $bank->bank = request('bank');
+            $bank->aadhar_pan = request('aadhar_pan');
+            $bank->ifsc_code = request('ifsc_code');
+            $bank->save();
+        }
+
+        $r_user = UserMaster::find(request('reffer_by'));
+        $checkRefPoint = DB::select("SELECT * FROM `reffer` WHERE (reffer_by = $r_user->id and reffer_to = $user_master->id or reffer_by = $user_master->id and reffer_to = $r_user->id) or reffer_to = $user_master->id");
+        if (count($checkRefPoint) < 1) {
+            $reffer = new Reffer();
+            $reffer->reffer_by = $r_user->id;
+            $reffer->reffer_to = $user_master->id;
+            $reffer->save();
+            GainTypePoints::get_gain_type_points($r_user->id, 'referral');
+        }
         return redirect('/user_master')->with('message', 'User has been updated...!');
     }
 
