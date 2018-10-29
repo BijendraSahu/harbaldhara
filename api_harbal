@@ -64,3 +64,8 @@ ALTER TABLE `advertisement` CHANGE `banner` `file_path` VARCHAR(100) CHARACTER S
 ALTER TABLE `advertisement` ADD `view_points` FLOAT NULL DEFAULT '0' AFTER `text`;
 
   //18_10
+
+
+  Bijendra Sahu
+
+

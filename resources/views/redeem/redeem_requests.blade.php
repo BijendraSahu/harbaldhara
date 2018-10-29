@@ -34,6 +34,7 @@
                             <th>Paytm Contact</th>
                             <th>Points Request</th>
                             <th>Amount</th>
+                            <th>Payable Amount</th>
                             <th>Status</th>
                             <th>Reject Reason</th>
                             <th>Approval Date</th>
@@ -42,6 +43,19 @@
                         <tbody>
                         @if(count($redeem_requests)>0)
                             @foreach($redeem_requests as $redeem_request)
+                                @php
+                                    $user_bank = \App\UserBankDetails::where(['user_id'=>$redeem_request->user_id])->first();
+
+                                @endphp
+                                @if(isset($user_bank->aadhar_pan))
+                                    @php $pay_amt = $redeem_request->amount-$redeem_request->amount*10/100;
+                                    $tds_percent = 10;
+                                    @endphp
+                                @else
+                                    @php $pay_amt = $redeem_request->amount-$redeem_request->amount*20/100;
+                                    $tds_percent = 20;
+                                    @endphp
+                                @endif
                                 <tr>
                                     <td class="hidden">{{$redeem_request->id}}</td>
                                     <td id="{{$redeem_request->id}}">
@@ -70,6 +84,7 @@
                                     <td>{{isset($redeem_request->user->paytm_contact)?$redeem_request->user->paytm_contact:''}}</td>
                                     <td>{{$redeem_request->point}}</td>
                                     <td>{{"Rs. ".$redeem_request->amount}}</td>
+                                    <td>{{"Rs. ".$pay_amt}} <span class="badge">-{{$tds_percent}}%</span></td>
                                     <td>@if($redeem_request->status == 'approved')
                                             <label class="label label-success">Approved</label>
                                         @elseif($redeem_request->status == 'pending')

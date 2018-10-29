@@ -25,7 +25,7 @@
                         <tr class="bg-info">
                             <th class="hidden">Id</th>
                             <th class="options">Options</th>
-                            <th>Profile</th>
+                            {{--<th>Profile</th>--}}
                             <th>Referral Code</th>
                             <th>Name</th>
                             <th>Contact</th>
@@ -72,11 +72,11 @@
                                             <span class="mdi mdi-remote"></span></a>
 
                                     </td>
-                                    <td>
-                                        <div class="post_imgblock_admin"><img style="height: 100%; width: 100%"
-                                                                              src="{{url('').'/'.$user_master->profile_img}}"/>
-                                        </div>
-                                    </td>
+                                    {{--<td>--}}
+                                        {{--<div class="post_imgblock_admin"><img style="height: 100%; width: 100%"--}}
+                                                                              {{--src="{{url('').'/'.$user_master->profile_img}}"/>--}}
+                                        {{--</div>--}}
+                                    {{--</td>--}}
                                     <td>{{$user_master->rc}}</td>
                                     <td>{{$user_master->name}}</td>
                                     <td>{{$user_master->contact}}</td>

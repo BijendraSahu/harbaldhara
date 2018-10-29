@@ -57,7 +57,7 @@ class UserMasterController extends Controller
 //        $user_master->activated_by = request('activated_by');
         $user_master->save();
 
-        if(request('account_holder') != null) {
+        if (request('account_holder') != null) {
             $bank = UserBankDetails::where(['user_id' => $id])->first();
             $bank->account_holder = request('account_holder');
             $bank->ac_number = request('ac_number');
@@ -105,7 +105,7 @@ class UserMasterController extends Controller
     public function activate($id)
     {
 //        echo request('key');
-        $key = UserKey::where(['key_name' => request('key')])->first();
+        $key = UserKey::where(['key_name' => request('key'), 'is_active' => 1])->first();
         if (isset($key)) {
             if ($key->remaining > 0) {
                 $key->remaining -= 1;

@@ -39,8 +39,8 @@ class SettingController extends Controller
 
     public function changepass()
     {
-        $opass = request('opass');
-        $npass = request('npass');
+        $opass = md5(request('opass'));
+        $npass = md5(request('npass'));
         $mypass = LoginModel::find(['id' => $_SESSION['admin_master']['id']])->first();
         if ($mypass['password'] == $opass) {
             $admindata = array(

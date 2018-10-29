@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdminModel;
 use App\RedeemRequest;
+use App\UserBankDetails;
 use App\UserMaster;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,8 +30,19 @@ class RedeemController extends Controller
         $user->points = 0;
         $user->save();
 
+
+        $user_bank = UserBankDetails::where(['user_id' => $redeem->user_id])->first();
+        $pay_amt = 0;
+        if (isset($user_bank->aadhar_pan)) {
+            $pay_amt = $redeem->amount - $redeem->amount * 10 / 100;
+//            $tds_percent = 10;
+        } else {
+            $pay_amt = $redeem->amount - $redeem->amount * 20 / 100;
+//            $tds_percent = 20;
+        }
+
         $title = "Request Approved";
-        $message = "Thanks for joining us your redeem request has been approved amount has been sent to your paytm number";
+        $message = "Thanks for joining us your redeem request has been approved...Rs.$pay_amt has been sent to your paytm number";
         if (isset($user->token)) {
             AdminModel::getNotification($user->token, $title, $message);
         }

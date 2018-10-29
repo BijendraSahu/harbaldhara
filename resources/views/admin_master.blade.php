@@ -1117,7 +1117,13 @@
 <div class="overlay_res" onclick="HideTranparent();"></div>
 <div id="snackbar">New Categories added Successfully</div>
 <script src="{{ url('assets/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ url('assets/js/jquery.table2excel.js') }}"></script>
 <script>
+    function exporttoexcel() {
+        $("#example").table2excel({
+            filename: "client_request.csv"
+        });
+    }
     $(function () {
         $('.dtp').datepicker({
             format: "dd-MM-yyyy",

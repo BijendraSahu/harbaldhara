@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AdminModel;
 use App\Advertisement;
 use App\BankDetails;
+use App\GainPoint;
 use App\GainTypePoints;
 use App\Gallery;
 use App\NewsModel;
@@ -167,39 +168,44 @@ class APIController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
         $user = UserMaster::find(request('user_id'));
-        if (isset($user)) {
-            $user->name = request('name');
-            $user->paytm_contact = request('paytm_no');
-            $user->address = request('address');
-            if (request('profile_img') != null) {
-                $data = request('profile_img');
-                list($type, $data) = explode(';', $data);
-                list(, $data) = explode(',', $data);
-                $data = base64_decode($data);
-                $image_name = time() . '.png';
-                $path = "u_img/" . $image_name;
-                file_put_contents($path, $data);
-                $user->profile_img = $path;
-            }
-            $user->save();
-            if (request('user_rc') != null) {
-                $r_user = UserMaster::where(['rc' => request('user_rc')])->first();
-                $checkRefPoint = DB::select("SELECT * FROM `reffer` WHERE (reffer_by = $r_user->id and reffer_to = $user->id or reffer_by = $user->id and reffer_to = $r_user->id) or reffer_to = $user->id");
-                if (count($checkRefPoint) < 1) {
-                    $reffer = new Reffer();
-                    $reffer->reffer_by = $r_user->id;
-                    $reffer->reffer_to = $user->id;
-                    $reffer->save();
-                    GainTypePoints::get_gain_type_points($r_user->id, 'referral');
-                }
-            }
-            GainTypePoints::get_gain_type_points($user->id, 'welcome');
-            $user_bank = UserBankDetails::where(['user_id' => $user->id])->first();
-            $result = [];
-            $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
-            return $this->sendResponse($result, 'Profile has been updated...');
+        $paytm = UserMaster::where(['paytm_contact' => request('paytm_no')])->first();
+        if (isset($paytm) && request('paytm_no') != null) {
+            return $this->sendError('Paytm no already exist', '');
         } else {
-            return $this->sendError('No record found', '');
+            if (isset($user)) {
+                $user->name = request('name');
+                $user->paytm_contact = request('paytm_no');
+                $user->address = request('address');
+                if (request('profile_img') != null) {
+                    $data = request('profile_img');
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = time() . '.png';
+                    $path = "u_img/" . $image_name;
+                    file_put_contents($path, $data);
+                    $user->profile_img = $path;
+                }
+                $user->save();
+                if (request('user_rc') != null) {
+                    $r_user = UserMaster::where(['rc' => request('user_rc')])->first();
+                    $checkRefPoint = DB::select("SELECT * FROM `reffer` WHERE (reffer_by = $r_user->id and reffer_to = $user->id or reffer_by = $user->id and reffer_to = $r_user->id) or reffer_to = $user->id");
+                    if (count($checkRefPoint) < 1) {
+                        $reffer = new Reffer();
+                        $reffer->reffer_by = $r_user->id;
+                        $reffer->reffer_to = $user->id;
+                        $reffer->save();
+                        GainTypePoints::get_gain_type_points($r_user->id, 'referral');
+                    }
+                }
+                GainTypePoints::get_gain_type_points($user->id, 'welcome');
+                $user_bank = UserBankDetails::where(['user_id' => $user->id])->first();
+                $result = [];
+                $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
+                return $this->sendResponse($result, 'Profile has been updated...');
+            } else {
+                return $this->sendError('No record found', '');
+            }
         }
     }
 
@@ -216,39 +222,44 @@ class APIController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
         $user = UserMaster::find(request('user_id'));
-        if (isset($user)) {
-            $user->name = request('name');
-            $user->paytm_contact = request('paytm_no');
-            $user->address = request('address');
-            if (request('profile_img') != null) {
-                $data = request('profile_img');
-                list($type, $data) = explode(';', $data);
-                list(, $data) = explode(',', $data);
-                $data = base64_decode($data);
-                $image_name = time() . '.png';
-                $path = "u_img/" . $image_name;
-                file_put_contents($path, $data);
-                $user->profile_img = $path;
-            }
-            $user->save();
-            if (request('user_rc') != null) {
-                $r_user = UserMaster::where(['rc' => request('user_rc')])->first();
-                $checkRefPoint = DB::select("SELECT * FROM `reffer` WHERE (reffer_by = $r_user->id and reffer_to = $user->id or reffer_by = $user->id and reffer_to = $r_user->id) or reffer_to = $user->id");
-                if (count($checkRefPoint) < 1) {
-                    $reffer = new Reffer();
-                    $reffer->reffer_by = $r_user->id;
-                    $reffer->reffer_to = $user->id;
-                    $reffer->save();
-//                    GainTypePoints::get_gain_type_points($r_user->id, 'referral');
-                }
-            }
-//            GainTypePoints::get_gain_type_points($user->id, 'welcome');
-            $user_bank = UserBankDetails::where(['user_id' => $user->id])->first();
-            $result = [];
-            $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
-            return $this->sendResponse($result, 'Profile has been updated...');
+        $paytm = UserMaster::where(['paytm_contact' => request('paytm_no')])->first();
+        if (isset($paytm) && request('paytm_no') != null && $paytm->paytm_contact != request('paytm_no')) {
+            return $this->sendError('Paytm no already exist', '');
         } else {
-            return $this->sendError('No record found', '');
+            if (isset($user)) {
+                $user->name = request('name');
+                $user->paytm_contact = request('paytm_no');
+                $user->address = request('address');
+                if (request('profile_img') != null) {
+                    $data = request('profile_img');
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = time() . '.png';
+                    $path = "u_img/" . $image_name;
+                    file_put_contents($path, $data);
+                    $user->profile_img = $path;
+                }
+                $user->save();
+                if (request('user_rc') != null) {
+                    $r_user = UserMaster::where(['rc' => request('user_rc')])->first();
+                    $checkRefPoint = DB::select("SELECT * FROM `reffer` WHERE (reffer_by = $r_user->id and reffer_to = $user->id or reffer_by = $user->id and reffer_to = $r_user->id) or reffer_to = $user->id");
+                    if (count($checkRefPoint) < 1) {
+                        $reffer = new Reffer();
+                        $reffer->reffer_by = $r_user->id;
+                        $reffer->reffer_to = $user->id;
+                        $reffer->save();
+//                    GainTypePoints::get_gain_type_points($r_user->id, 'referral');
+                    }
+                }
+//            GainTypePoints::get_gain_type_points($user->id, 'welcome');
+                $user_bank = UserBankDetails::where(['user_id' => $user->id])->first();
+                $result = [];
+                $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
+                return $this->sendResponse($result, 'Profile has been updated...');
+            } else {
+                return $this->sendError('No record found', '');
+            }
         }
     }
 
@@ -287,6 +298,29 @@ class APIController extends Controller
         $points = UserMaster::find($user_id);
         if (isset($points)) {
             return $this->sendResponse($points->points, 'My Points');
+        } else {
+            return $this->sendError('No record available', '');
+        }
+    }
+
+    public function get_user_point_new(Request $request)
+    {
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $user_id = request('user_id');
+        $points = UserMaster::find($user_id);
+        $admin = AdminModel::find(1);
+        $rupees = $points->points / $admin->point_to_rupee;
+        if (isset($points)) {
+            $data = ['point' => $points->points, 'rupees' => $rupees];
+            return $this->sendResponse($data, 'My Points');
         } else {
             return $this->sendError('No record available', '');
         }
@@ -414,28 +448,34 @@ class APIController extends Controller
         }
 
         $user = UserMaster::find(request('user_id'));
-        if (isset($user)) {
-            if ($user->is_paid == 1) {
-                $admin = AdminModel::find(1);
-                if ($user->points > 0 && $user->points >= $admin->point_to_rupee) {
-                    $rupees = $user->points / $admin->point_to_rupee;
-                    $points = $user->points;
-                    $redeem_req = new RedeemRequest();
-                    $redeem_req->user_id = $user->id;
-                    $redeem_req->point = $points;
-                    $redeem_req->amount = $rupees;
-                    $redeem_req->save();
+        $redeem_r = RedeemRequest::where(['user_id' => $user->id, 'status' => 'pending'])->first();
+        if (isset($redeem_r)) {
+            return $this->sendError("You have already request for redeem which is not approved yet please wait...", '');
+        } else {
+            if (isset($user)) {
+                if ($user->is_paid == 1) {
+                    $admin = AdminModel::find(1);
+                    if ($user->points > 0 && $user->points >= $admin->point_to_rupee) {
+                        $rupees = $user->points / $admin->point_to_rupee;
+                        $points = $user->points;
+                        $redeem_req = new RedeemRequest();
+                        $redeem_req->user_id = $user->id;
+                        $redeem_req->point = $points;
+                        $redeem_req->amount = $rupees;
+                        $redeem_req->save();
 
-                    return $this->sendResponse($user, "Your redeem request has been send...Rs. $rupees will be added to your paytm account within 24 hours.");
+                        return $this->sendResponse($user, "Your redeem request has been send...Rs. $rupees will be added to your paytm account within 24 hours.");
+                    } else {
+                        return $this->sendError("You don't have enough points to redeem...Min point to redeem is $admin->point_to_rupee", '');
+                    }
                 } else {
-                    return $this->sendError("You don't have enough points to redeem...Min point to redeem is $admin->point_to_rupee", '');
+                    return $this->sendError("You cannot redeem until you will not be a paid member", '');
                 }
             } else {
-                return $this->sendError("You cannot redeem until you will not be a paid member", '');
+                return $this->sendError('User record not found', '');
             }
-        } else {
-            return $this->sendError('User record not found', '');
         }
+
     }
 
     public function redeem_history(Request $request)
@@ -453,6 +493,27 @@ class APIController extends Controller
         $redeems = RedeemRequest::where(['user_id' => $user_id])->get();
         if (count($redeems) > 0) {
             return $this->sendResponse($redeems, "Your redeem request history");
+        } else {
+            return $this->sendError('User record not found', '');
+        }
+    }
+
+    public function point_history(Request $request)
+    {
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $user_id = request('user_id');
+        $points = DB::select("SELECT user_id, sum(points) as points, created_time FROM `gain_points` WHERE user_id = $user_id GROUP by gain_points.created_time ORDER by gain_points.created_time DESC");
+        //GainPoint::where(['user_id' => $user_id])->orderBy('id', 'desc')->get();
+        if (count($points) > 0) {
+            return $this->sendResponse($points, "Your point history");
         } else {
             return $this->sendError('User record not found', '');
         }
@@ -514,24 +575,33 @@ class APIController extends Controller
         $ah_pan = request('pan');
         $user_id = request('user_id');
         $exist_bank = UserBankDetails::where(['user_id' => $user_id])->first();
-        if (isset($exist_bank)) {
-            isset($ahName) ? $exist_bank->account_holder = $ahName : '';
-            isset($ah_no) ? $exist_bank->ac_number = $ah_no : '';
-            isset($ah_bnk) ? $exist_bank->bank = $ah_bnk : '';
-            isset($ah_ifs) ? $exist_bank->ifsc_code = $ah_ifs : '';
-            isset($ah_pan) ? $exist_bank->aadhar_pan = $ah_pan : '';
-            $exist_bank->save();
-            return $this->sendResponse($exist_bank, 'User details has been updated');
+
+        $pan = UserBankDetails::where(['aadhar_pan' => $ah_pan])->first();
+        $acc = UserBankDetails::where(['ac_number' => $ah_no])->first();
+        if (isset($pan) && request('pan') != null && $exist_bank->aadhar_pan != $ah_pan) {
+            return $this->sendError('PAN already exist', '');
+        } elseif (isset($acc) && request('ac_no') != null && $exist_bank->ac_number != $ah_no) {
+            return $this->sendError('Account no already exist', '');
         } else {
-            $bank = new UserBankDetails();
-            $bank->account_holder = $ahName;
-            $bank->ac_number = $ah_no;
-            $bank->bank = $ah_bnk;
-            $bank->ifsc_code = $ah_ifs;
-            $bank->aadhar_pan = $ah_pan;
-            $bank->user_id = $user_id;
-            $bank->save();
-            return $this->sendResponse($bank, 'User details has been saved');
+            if (isset($exist_bank)) {
+                isset($ahName) ? $exist_bank->account_holder = $ahName : '';
+                isset($ah_no) ? $exist_bank->ac_number = $ah_no : '';
+                isset($ah_bnk) ? $exist_bank->bank = $ah_bnk : '';
+                isset($ah_ifs) ? $exist_bank->ifsc_code = $ah_ifs : '';
+                isset($ah_pan) ? $exist_bank->aadhar_pan = $ah_pan : '';
+                $exist_bank->save();
+                return $this->sendResponse($exist_bank, 'User details has been updated');
+            } else {
+                $bank = new UserBankDetails();
+                $bank->account_holder = $ahName;
+                $bank->ac_number = $ah_no;
+                $bank->bank = $ah_bnk;
+                $bank->ifsc_code = $ah_ifs;
+                $bank->aadhar_pan = $ah_pan;
+                $bank->user_id = $user_id;
+                $bank->save();
+                return $this->sendResponse($bank, 'User details has been saved');
+            }
         }
     }
 
@@ -540,8 +610,9 @@ class APIController extends Controller
     public function getAdsPoints(Request $request)
     {
         $ads_points = GainTypePoints::get();
+        $admin = AdminModel::find(1);
         if (count($ads_points) > 0) {
-            return $this->sendResponse($ads_points, "List of advertisement points");
+            return $this->sendResponse($ads_points, "List of advertisement points $admin->point_to_rupee");
         } else {
             return $this->sendError('User record not found', '');
         }

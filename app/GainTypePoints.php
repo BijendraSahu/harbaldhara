@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class GainTypePoints extends Model
@@ -15,5 +16,11 @@ class GainTypePoints extends Model
         $user = UserMaster::find($user_id);
         $user->points += $gain_type_point->points;
         $user->save();
+
+        $gain_point = new GainPoint();
+        $gain_point->user_id = $user_id;
+        $gain_point->points = $gain_type_point->points;
+        $gain_point->created_time = Carbon::now('Asia/Kolkata');
+        $gain_point->save();
     }
 }

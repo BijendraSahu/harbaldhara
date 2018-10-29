@@ -110,6 +110,7 @@ Route::get('resend_otp','APIController@resend_otp');
 Route::get('getAllAds','APIController@getAllAds');
 Route::get('checkrc','APIController@checkrc');
 Route::get('get_user_point','APIController@get_user_point');
+Route::get('get_user_point_new','APIController@get_user_point_new');
 Route::get('view_share_ads_by_user','APIController@view_share_ads_by_user');
 Route::post('edit_profile','APIController@edit_profile');
 Route::post('edit_profile_login','APIController@edit_profile_login');
@@ -120,6 +121,7 @@ Route::get('getAllGallery','APIController@getAllGallery');
 //-----------Redeem----------//
 Route::get('redeem_now', 'APIController@redeem_now'); //Redeems now
 Route::get('redeem_history', 'APIController@redeem_history'); //Redeems show
+Route::get('point_history', 'APIController@point_history'); //Point show
 Route::get('add_update_bank_details','APIController@add_update_bank_details');
 //-----------Redeem----------//
 Route::get('getData','AdminController@getData');
