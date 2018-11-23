@@ -510,10 +510,34 @@ class APIController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
         $user_id = request('user_id');
-        $points = DB::select("SELECT user_id, sum(points) as points, created_time FROM `gain_points` WHERE user_id = $user_id GROUP by gain_points.created_time ORDER by gain_points.created_time DESC");
-        //GainPoint::where(['user_id' => $user_id])->orderBy('id', 'desc')->get();
+        $points = DB::select("SELECT user_id,GP.created_time FROM `gain_points` GP WHERE GP.user_id = 2  ORDER by GP.created_time DESC");
+   //     $row=array_unique($points));
+$arr=array();
+        foreach ($points as $obj)
+        {
+
+            $time=$obj->created_time;
+           $point_data=DB::select("select  sum(points) as points from gain_points WHERE user_id=$user_id and created_time='$time'");
+          array_push($arr,['user_id'=>$obj->user_id,'created_time'=>$obj->created_time,'Points'=>$point_data[0]->points]);
+          ///  array_push($arr,['A'=>$obj,'B'=>$point_data]);
+
+        }
+
+
+
+//        $points = DB::table('gain_points')->where('user_id',$user_id)
+//            ->select('user_id','created_time', DB::raw('sum(points) as points'))
+//            ->groupBy('created_time')
+//            ->get();
+
+
+
+//            DB::select("SELECT user_id,sum(points) as points,GP.created_time FROM `gain_points` GP WHERE GP.user_id = 2  ORDER by GP.created_time DESC")->groupBy('created_time');
+
+        GainPoint::where(['user_id' => $user_id])->orderBy('id', 'desc')->get();
         if (count($points) > 0) {
-            return $this->sendResponse($points, "Your point history");
+           // $w=array_unique(explode(',', $arr[0]));
+            return $this->sendResponse($arr, "Your point history");
         } else {
             return $this->sendError('User record not found', '');
         }
