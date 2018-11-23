@@ -72,6 +72,8 @@
                                                 <span></span>
                                                 <button class="btn btn-primary">Search</button>
                                                 <a href="{{url('distribution')}}" class="btn btn-success">Refresh</a>
+                                                <a class="btn btn-default pull-right btn-sm" onclick="exporttoexcel();"><i
+                                                            class="mdi mdi-download"></i> Download Excel</a>
                                             </div>
                                         </div>
                                     </form>

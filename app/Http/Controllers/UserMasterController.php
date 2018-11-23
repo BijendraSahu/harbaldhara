@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AdminModel;
+use App\GainPoint;
 use App\GainTypePoints;
 use App\Reffer;
 use App\RoleMaster;
@@ -112,13 +113,19 @@ class UserMasterController extends Controller
                 $key->save();
                 $user_master = UserMaster::find($id);
                 $user_master->is_paid = 1;
-                $user_master->paid_time = Carbon::now();
+                $user_master->paid_time = Carbon::now('Asia/Kolkata');
                 $user_master->activated_by = $_SESSION['admin_master']->id;
                 $user_master->save();
+
+                $reffer_by = Reffer::where(['reffer_to' => $id])->first();
+                if (isset($reffer_by)) {
+                    GainTypePoints::get_gain_type_points($reffer_by->reffer_by, 'activate');
+                }
+
                 $title = "Account Activation Successful";
                 $message = "your account has been activated";
                 if (isset($user_master->token)) {
-                    AdminModel::getNotification($user_master->token, $title, $message);
+                   AdminModel::getNotification($user_master->token, $title, $message);
                 }
                 return redirect('/admin')->with('message', 'User is now activated');
             } else {
@@ -157,6 +164,31 @@ class UserMasterController extends Controller
         } else {
             return redirect('user_master')->with('message', 'Notification has not been send because user is using older version');
         }
+    }
+
+    public function repurchase($id)
+    {
+        $gain_type_point = GainTypePoints::where(['gain_type' => 'repurchase'])->first();
+        $user = UserMaster::find($id);
+        $user->points += $gain_type_point->points;
+        $user->save();
+
+        $gain_point = new GainPoint();
+        $gain_point->user_id = $id;
+        $gain_point->points = $gain_type_point->points;
+        $gain_point->created_time = Carbon::now('Asia/Kolkata');
+        $gain_point->save();
+        return redirect('user_master')->with('message', 'User marked as repurchased');
+
+//        $title = "Aranea Reminder";
+//        $message = "Hi $user->name it's an reminder for you to become paid member otherwise your points will get laps in next 24 hours";
+//        if (isset($user->token)) {
+//            AdminModel::getNotification($user->token, $title, $message);
+//            return redirect('user_master')->with('message', 'Notification has been send');
+//        } else {
+//            return redirect('user_master')->with('message', 'Notification has not been send because user is using older version');
+//        }
+        //ALTER TABLE `gain_type_points` CHANGE `gain_type` `gain_type` ENUM('img','video','text','share','referral','activate','welcome','repurchase') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
     }
 
     public function checkUsername($username)

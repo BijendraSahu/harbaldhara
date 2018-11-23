@@ -14,6 +14,8 @@
                         <option {{$gain_types->gain_type == 'share'?'selected':''}} value="share">Share</option>
                         <option {{$gain_types->gain_type == 'referral'?'selected':''}} value="referral">Referral</option>
                         <option {{$gain_types->gain_type == 'activate'?'selected':''}} value="activate">Activate</option>
+                        <option {{$gain_types->gain_type == 'repurchase'?'selected':''}} value="repurchase">Repurchase</option>
+                        <option {{$gain_types->gain_type == 'welcome'?'selected':''}} value="welcome">Welcome</option>
                     </select>
                 </div>
             </div>

@@ -66,17 +66,18 @@
                                                        class="form-control dtp"
                                                        name="start_date"/>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <label for="">End Date</label>
                                                 <input type="text" placeholder="End Date" class="form-control dtp"
                                                        autocomplete="off" name="end_date"/>
                                             </div>
                                             <br>
-                                            <div class="col-sm-3">
-                                                <span></span>
+                                            <div class="col-sm-4">
                                                 <button class="btn btn-primary">Search</button>
                                                 <a href="{{url('user_by_franchise')}}"
                                                    class="btn btn-success">Refresh</a>
+                                                <a class="btn btn-default btn-sm" onclick="exporttoexcel();"><i
+                                                            class="mdi mdi-download"></i> Download Excel</a>
                                             </div>
                                         </div>
                                     </form>
@@ -88,7 +89,7 @@
                                             <thead>
                                             <tr class="bg-info">
                                                 <th class="hidden">Id</th>
-                                                <th>Profile</th>
+                                                <th class="export_hide">Profile</th>
                                                 <th>Referral Code</th>
                                                 <th>Name</th>
                                                 <th>Contact</th>
@@ -108,7 +109,7 @@
                                                     <tr>
                                                         <td class="hidden">{{$user_master->id}}</td>
 
-                                                        <td>
+                                                        <td class="export_hide">
                                                             <div class="post_imgblock_admin"><img
                                                                         style="height: 100%; width: 100%"
                                                                         src="{{url('').'/'.$user_master->profile_img}}"/>

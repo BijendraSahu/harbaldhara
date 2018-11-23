@@ -1120,9 +1120,14 @@
 <script src="{{ url('assets/js/jquery.table2excel.js') }}"></script>
 <script>
     function exporttoexcel() {
+        $('.export_hide').remove();
         $("#example").table2excel({
             filename: "client_request.csv"
         });
+        setTimeout(function () {
+            window.location.reload();
+        }, 200);
+
     }
     $(function () {
         $('.dtp').datepicker({

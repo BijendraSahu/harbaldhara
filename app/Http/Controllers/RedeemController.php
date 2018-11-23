@@ -19,10 +19,17 @@ class RedeemController extends Controller
         return view('redeem.redeem_requests')->with(['redeem_requests' => $redeem_requests]);
     }
 
+    public function getapproved($id)
+    {
+        $redeem_requests = RedeemRequest::find($id);
+        return view('redeem.approve_reason')->with(['redeem_requests' => $redeem_requests]);
+    }
+
     public function approved($id)
     {
         $redeem = RedeemRequest::find($id);
         $redeem->status = 'approved';
+        $redeem->reject_reason = request('approve_reason');
         $redeem->approved_time = Carbon::now('Asia/Kolkata');
         $redeem->save();
 

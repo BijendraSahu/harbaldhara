@@ -69,6 +69,7 @@ class APIController extends Controller
             $token = request('token');
             $usermob->otp = $otp;
             $usermob->token = $token;
+            $usermob->city = request('city');
             $usermob->save();
 //            file_get_contents("http://api.msg91.com/api/sendhttp.php?sender=CONONE&route=4&mobiles=$usermob->contact&authkey=213418AONRGdnQ5ae96f62&country=91&message=Dear%20User,%20OTP%20to%20verify%20your%20account%20is%20$otp");
             file_get_contents("http://63.142.255.148/api/sendmessage.php?usr=retinodes&apikey=1A4428ABD1CB0BD43FB3&sndr=iapptu&ph=$usermob->contact&message=Dear%20User,%20OTP%20to%20verify%20your%20account%20is%20$otp");
@@ -86,6 +87,7 @@ class APIController extends Controller
             //$data->name = request('name');
             $data->contact = request('contact');
             $data->token = request('token');
+            $data->city = request('city');
             //$data->paytm_contact = request('paytm_contact');
             $data->created_time = Carbon::now('Asia/Kolkata');
             $data->save();
@@ -176,6 +178,7 @@ class APIController extends Controller
                 $user->name = request('name');
                 $user->paytm_contact = request('paytm_no');
                 $user->address = request('address');
+                $user->city = request('city');
                 if (request('profile_img') != null) {
                     $data = request('profile_img');
                     list($type, $data) = explode(';', $data);
@@ -201,7 +204,7 @@ class APIController extends Controller
                 GainTypePoints::get_gain_type_points($user->id, 'welcome');
                 $user_bank = UserBankDetails::where(['user_id' => $user->id])->first();
                 $result = [];
-                $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
+                $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'city' => $user->city, 'bank_details' => $user_bank];
                 return $this->sendResponse($result, 'Profile has been updated...');
             } else {
                 return $this->sendError('No record found', '');
@@ -230,6 +233,7 @@ class APIController extends Controller
                 $user->name = request('name');
                 $user->paytm_contact = request('paytm_no');
                 $user->address = request('address');
+                $user->city = request('city');
                 if (request('profile_img') != null) {
                     $data = request('profile_img');
                     list($type, $data) = explode(';', $data);
@@ -255,7 +259,7 @@ class APIController extends Controller
 //            GainTypePoints::get_gain_type_points($user->id, 'welcome');
                 $user_bank = UserBankDetails::where(['user_id' => $user->id])->first();
                 $result = [];
-                $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
+                $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'city' => $user->city, 'bank_details' => $user_bank];
                 return $this->sendResponse($result, 'Profile has been updated...');
             } else {
                 return $this->sendError('No record found', '');
@@ -511,18 +515,16 @@ class APIController extends Controller
         }
         $user_id = request('user_id');
         $points = DB::select("SELECT user_id,GP.created_time FROM `gain_points` GP WHERE GP.user_id = 2  ORDER by GP.created_time DESC");
-   //     $row=array_unique($points));
-$arr=array();
-        foreach ($points as $obj)
-        {
+        //     $row=array_unique($points));
+        $arr = array();
+        foreach ($points as $obj) {
 
-            $time=$obj->created_time;
-           $point_data=DB::select("select  sum(points) as points from gain_points WHERE user_id=$user_id and created_time='$time'");
-          array_push($arr,['user_id'=>$obj->user_id,'created_time'=>$obj->created_time,'Points'=>$point_data[0]->points]);
-          ///  array_push($arr,['A'=>$obj,'B'=>$point_data]);
+            $time = $obj->created_time;
+            $point_data = DB::select("select  sum(points) as points from gain_points WHERE user_id=$user_id and created_time='$time'");
+            array_push($arr, ['user_id' => $obj->user_id, 'created_time' => $obj->created_time, 'Points' => $point_data[0]->points]);
+            ///  array_push($arr,['A'=>$obj,'B'=>$point_data]);
 
         }
-
 
 
 //        $points = DB::table('gain_points')->where('user_id',$user_id)
@@ -531,12 +533,11 @@ $arr=array();
 //            ->get();
 
 
-
 //            DB::select("SELECT user_id,sum(points) as points,GP.created_time FROM `gain_points` GP WHERE GP.user_id = 2  ORDER by GP.created_time DESC")->groupBy('created_time');
 
         GainPoint::where(['user_id' => $user_id])->orderBy('id', 'desc')->get();
         if (count($points) > 0) {
-           // $w=array_unique(explode(',', $arr[0]));
+            // $w=array_unique(explode(',', $arr[0]));
             return $this->sendResponse($arr, "Your point history");
         } else {
             return $this->sendError('User record not found', '');
@@ -561,7 +562,7 @@ $arr=array();
         $user_bank = UserBankDetails::where(['user_id' => $user_id])->first();
         if (isset($user)) {
             $result = [];
-            $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
+            $result = ['id' => $user->id, 'otp' => $user->otp, 'contact' => $user->contact, 'paytm_contact' => $user->paytm_contact, 'name' => $user->name, 'profile_img' => $user->profile_img, 'address' => $user->address, 'rc' => $user->rc, 'points' => $user->points, 'is_paid' => $user->is_paid, 'activated_by' => $user->activated_by, 'city' => $user->city, 'is_active' => $user->is_active, 'token' => $user->token, 'created_time' => $user->created_time, 'bank_details' => $user_bank];
             return $this->sendResponse($result, "User Record");
         } else {
             return $this->sendError('User record not found', '');
@@ -696,5 +697,12 @@ $arr=array();
         // $downstreamResponse->tokensToRetry();
 
 // return Array (key:token, value:errror) - in production you should remove from your database the token
+    }
+
+
+    public function getCity()
+    {
+        $cities = DB::select("select * from cities where City IS NOT NULL order by City ASC");
+        return $this->sendResponse($cities, "List of Cities");
     }
 }

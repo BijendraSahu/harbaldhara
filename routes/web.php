@@ -52,6 +52,7 @@ Route::post('user_master/{id}/activate', 'UserMasterController@activate');
 Route::get('user_master/{id}/inactivate', 'UserMasterController@inactivate');
 Route::get('user_master/{id}/empty', 'UserMasterController@empty_point');
 Route::get('user_master/{id}/remind', 'UserMasterController@reminder_points');
+Route::get('user_master/{id}/repurchase', 'UserMasterController@repurchase');
 /*********Users***********/
 
 /*********News***********/
@@ -93,7 +94,8 @@ Route::post('assign_key/{id}', 'UserKeyController@assign_key_to_franchise');
 
 /*********Redeem***********/
 Route::get('redeem_requests', 'RedeemController@redeem_requests');
-Route::get('redeem_request/{id}/approve', 'RedeemController@approved');
+Route::get('redeem_request/{id}/approve', 'RedeemController@getapproved');
+Route::post('redeem_request/{id}/approve', 'RedeemController@approved');
 Route::get('redeem_request/{id}/reject', 'RedeemController@getreject');
 Route::post('redeem_request/{id}/reject', 'RedeemController@reject');
 /*********Redeem***********/
@@ -118,6 +120,7 @@ Route::get('getMyReferral','APIController@getMyReferral');
 Route::get('getAdsPoints','APIController@getAdsPoints');
 Route::get('getAllNews','APIController@getAllNews');
 Route::get('getAllGallery','APIController@getAllGallery');
+Route::get('getCity', 'APIController@getCity');
 //-----------Redeem----------//
 Route::get('redeem_now', 'APIController@redeem_now'); //Redeems now
 Route::get('redeem_history', 'APIController@redeem_history'); //Redeems show

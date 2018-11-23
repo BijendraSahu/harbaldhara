@@ -47,8 +47,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr4"><i
-                                                        class="mdi mdi-gift"></i></div>
+                                            <div class="white_icons_blk white_brics_clr4"><span
+                                                        class="mdi mdi-gift"></span></div>
                                             <div class="white_brics_txt">Franchise</div>
                                             <div class="white_brics_count">{{$franchise}}</div>
                                         </div>
@@ -60,7 +60,7 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk"><i class="mdi mdi-tag"></i></div>
+                                            <div class="white_icons_blk"><span class="mdi mdi-tag"></span></div>
                                             <div class="white_brics_txt">All Users</div>
                                             <div class="white_brics_count">{{count($users)}}</div>
                                         </div>
@@ -72,8 +72,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr2"><i
-                                                        class="mdi mdi-content-duplicate"></i></div>
+                                            <div class="white_icons_blk white_brics_clr2"><span
+                                                        class="mdi mdi-content-duplicate"></span></div>
                                             <div class="white_brics_txt">Active Users</div>
                                             <div class="white_brics_count">{{count($active_users)}}</div>
                                         </div>
@@ -86,8 +86,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr4"><i
-                                                        class="mdi mdi-clipboard-plus"></i></div>
+                                            <div class="white_icons_blk white_brics_clr4"><span
+                                                        class="mdi mdi-clipboard-plus"></span></div>
                                             <div class="white_brics_txt">InActive Users</div>
                                             <div class="white_brics_count">{{count($inactive_users)}}</div>
                                         </div>
@@ -114,8 +114,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr3"><i
-                                                        class="mdi mdi-forum"></i></div>
+                                            <div class="white_icons_blk white_brics_clr3"><span
+                                                        class="mdi mdi-forum"></span></div>
                                             <div class="white_brics_txt">Advertisement</div>
                                             <div class="white_brics_count">{{$advertisement}}</div>
                                         </div>
@@ -128,7 +128,7 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk"><i class="mdi mdi-cellphone-android"></i></div>
+                                            <div class="white_icons_blk"><span class="mdi mdi-cellphone-android"></span></div>
                                             <div class="white_brics_txt">Redeem Requests</div>
                                             <div class="white_brics_count">{{$redeem_request}}</div>
                                         </div>
@@ -140,8 +140,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr2"><i
-                                                        class="mdi mdi-message-image"></i></div>
+                                            <div class="white_icons_blk white_brics_clr2"><span
+                                                        class="mdi mdi-message-image"></span></div>
                                             <div class="white_brics_txt">Gain Type Points</div>
                                             <div class="white_brics_count">{{$gain_t}}</div>
                                         </div>
@@ -154,8 +154,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr2"><i
-                                                        class="mdi mdi-message-image"></i></div>
+                                            <div class="white_icons_blk white_brics_clr2"><span
+                                                        class="mdi mdi-message-image"></span></div>
                                             <div class="white_brics_txt">Key</div>
                                             <div class="white_brics_count">{{$keys}}</div>
                                         </div>
@@ -181,8 +181,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr4"><i
-                                                        class="mdi mdi-clipboard-plus"></i></div>
+                                            <div class="white_icons_blk white_brics_clr4"><span
+                                                        class="mdi mdi-clipboard-plus"></span></div>
                                             <div class="white_brics_txt">InActive Users</div>
                                             <div class="white_brics_count">{{count($inactive_users)}}</div>
                                         </div>
@@ -195,8 +195,8 @@
                                 <div class="col-sm-3">
                                     <div class="white_brics">
                                         <div class="white_icon_withtxt">
-                                            <div class="white_icons_blk white_brics_clr4"><i
-                                                        class="mdi mdi-clipboard-plus"></i></div>
+                                            <div class="white_icons_blk white_brics_clr4"><span
+                                                        class="mdi mdi-clipboard-plus"></span></div>
                                             <div class="white_brics_txt">Keys</div>
                                             <div class="white_brics_count">{{$key}}</div>
                                         </div>

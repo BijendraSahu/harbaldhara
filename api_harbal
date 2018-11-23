@@ -55,6 +55,9 @@ http://18.188.188.62/harbal/getAllNews
 All Gallery
 http://18.188.188.62/harbal/getAllGallery
 
+Get City
+http://18.223.133.128/getCity
+
 /*----------------------------Bijendra Sahu---------------------------------*/
 
 ALTER TABLE `advertisement` CHANGE `video` `file_type` ENUM('img','video','text') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'img';
