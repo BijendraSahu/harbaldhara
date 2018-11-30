@@ -25,7 +25,8 @@
                            <button class="btn btn-default pull-right btn-sm" onclick="exporttoexcel();"><i
                                        class="mdi mdi-download"></i> Download Excel</button>
                       </span>
-                    <table id="example" class="table table-bordered dataTable table-striped" cellspacing="0"
+                    <table id="example" class="table table-bordered dataTable table-striped scroll_table"
+                           cellspacing="0"
                            width="100%">
                         <thead>
                         <tr class="bg-info">
@@ -112,7 +113,7 @@
                         @endif
                         </tbody>
                     </table>
-                    <span>Total Paid Amount : {{$Total_Paid_Amt}}</span><br>
+                    <span>Total Paid Amount : {{round($Total_Paid_Amt,2)}}</span><br>
                     <span>Total Payable Amount : {{$Total_Payable_Amt}}</span>
                 </div>
             </div>
@@ -120,15 +121,15 @@
     </div>
     <script>
         {{--function approved(dis) {--}}
-            {{--var id = $(dis).attr('id');--}}
-            {{--$('#myModal').modal('show');--}}
-            {{--$('#mybody').html('<img height="50px" class="center-block" src="{{ url('assets/images/loading.gif') }}"/>');--}}
-            {{--$('#modal_title').html('Confirm Inactivation');--}}
-            {{--$('#mybody').html('<h5>Are you sure want to accept this request<h5/>');--}}
-            {{--$('#modalBtn').removeClass('hidden');--}}
-            {{--$('#modalBtn').html('<a class="btn btn-sm btn-success" href="{{ url('redeem_request') }}/' + id +--}}
-                {{--'/approve"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Confirm</a>'--}}
-            {{--);--}}
+        {{--var id = $(dis).attr('id');--}}
+        {{--$('#myModal').modal('show');--}}
+        {{--$('#mybody').html('<img height="50px" class="center-block" src="{{ url('assets/images/loading.gif') }}"/>');--}}
+        {{--$('#modal_title').html('Confirm Inactivation');--}}
+        {{--$('#mybody').html('<h5>Are you sure want to accept this request<h5/>');--}}
+        {{--$('#modalBtn').removeClass('hidden');--}}
+        {{--$('#modalBtn').html('<a class="btn btn-sm btn-success" href="{{ url('redeem_request') }}/' + id +--}}
+        {{--'/approve"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Confirm</a>'--}}
+        {{--);--}}
         {{--}--}}
         function approved(dis) {
             $('#myModal').modal('show');
